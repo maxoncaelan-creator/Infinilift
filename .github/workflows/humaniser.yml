@@ -1,0 +1,45 @@
+name: Humaniser check
+
+# Flags stock AI phrasing in the PR description and changed docs. It never blocks a merge:
+# surface tells are a prompt to look again. See .claude/skills/alio-humaniser/SKILL.md.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Plain-English check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Scan the PR description
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          {
+            echo "### PR description"
+            echo '```'
+            printf '%s\n' "$BODY" | python3 .claude/skills/alio-humaniser/scripts/tell_scan.py
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Scan changed docs
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git diff --name-only --diff-filter=AM "$BASE_SHA" HEAD -- '*.md' ':!.claude/**' |
+          while IFS= read -r file; do
+            {
+              echo "### $file"
+              echo '```'
+              python3 .claude/skills/alio-humaniser/scripts/tell_scan.py "$file"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          done

@@ -1,0 +1,9 @@
+# Dependency updates go to staging first, like every other change.
+# Add the npm ecosystem here once package.json exists.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: staging
+    schedule:
+      interval: weekly

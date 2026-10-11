@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [staging, main]
+  push:
+    branches: [staging, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    # This name is the required status check in .github/rulesets. Rename both together.
+    name: Lint, types and tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Wait for the app
+        if: hashFiles('package.json') == ''
+        run: echo "No package.json yet. Lint, type and test steps start once the Expo app is in."
+
+      - uses: actions/setup-node@v5
+        if: hashFiles('package.json') != ''
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        if: hashFiles('package.json') != ''
+        run: npm ci
+
+      - name: Lint
+        if: hashFiles('package.json') != ''
+        run: npm run lint
+
+      - name: Type check
+        if: hashFiles('package.json') != ''
+        run: npm run typecheck
+
+      - name: Test
+        if: hashFiles('package.json') != ''
+        run: npm test -- --ci
