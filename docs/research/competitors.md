@@ -9,10 +9,10 @@ User pain points from about 2,700 store reviews are in `pain-points.md`.
 | App | Size | Price from | Coach uses | Client uses | Own-name app in the stores | Payments |
 |---|---|---|---|---|---|---|
 | ABC Trainerize | 1M+ Google Play installs, 68,550 US App Store ratings | Free for 1 client, US$25/mo for 5 | Desktop web (no mobile browser), app | iOS, Android, Apple Watch, limited web | Studio plan. US$169 add-on gives an Android listing only | Stripe, US$10/mo add-on |
-| TrueCoach | 100K+ installs, 35,595 ratings | US$29.98/mo for 5 | Web, app | iOS, Android, mobile web | No. Logo and colour only | Stripe, included |
+| TrueCoach | 100K+ installs, 35,595 ratings | US$29.98/mo for 5 | Web, app | iOS, Android, mobile web | No. Logo and colour only | Stripe, flat 5% a payment since December 2025 |
 | Everfit | 100K+ installs, 2,708 ratings | Free for 5, US$19/mo | Web, cut-down app | iOS, Android, watches. No web | Enterprise only (500+ clients) | Stripe, US$9/mo add-on plus 2.25% + A$0.30 (AU cards) |
 | PT Distinction | 121 US ratings | US$19.90/mo | Web, app trainer mode | iOS, Android, web portal | Included from US$59.90/mo | PayPal; Stripe only through Zapier |
-| Kahunas | No public install count | US$35/mo | Web, app | iOS, Android, web (no workout logging) | US$99/mo plan, under the coach's own store accounts | Stripe or PayPal, 0% commission. Own-name iPhone app uses Apple in-app purchase |
+| Kahunas | No public install count | US$35/mo | Web, app | iOS, Android, web (no workout logging) | US$99/mo plan. iPhone under the coach's account, Android under Kahunas's | Stripe or PayPal, 0% commission. Own-name iPhone app uses Apple in-app purchase |
 | Foodzilla | 5K+ client installs | US$56/mo | Web, app | iOS, Android, web portal | US$168/mo plus a setup fee | Stripe, 7% platform fee on Pro |
 | LVLUP | 100+ installs | US$48/mo | Web | iOS, Android | US$78/mo, 12-month minimum, listed under LVLUP's account | Stripe, 0% commission |
 | FitPros.io | Web app only | Free, unlimited clients; US$29/mo Pro | Web | Home-screen web app (PWA) | No. Branded web app | Stripe |
@@ -60,7 +60,8 @@ All of them take client payments on the web, through the coach's own Stripe or P
 - No food diary or database; MyFitnessPal totals only.
 - No check-in forms, booking, storefront or community. Automation only through Zapier.
 - "Branded app" is a logo and colour inside the TrueCoach app.
-- Clients can't export their own workouts.
+- A flat 5% on every payment, refunds included, against Stripe's 1.65% + A$0.30 on Australian cards.
+- Clients can't export their own workouts, and archived clients can't log in at all.
 
 ## Everfit
 
@@ -91,7 +92,7 @@ All of them take client payments on the web, through the coach's own Stripe or P
 
 **Good.** Everything, AI included, on every plan. Branded iOS and Android apps at no extra fee from US$59.90/mo. In-app, email and SMS in one place, with transcribed voice notes.
 
-**Falls short.** Steep learning curve and a dated look. The client app crashes and loses workout data. PayPal only (Stripe through Zapier). Email-only support. ([Trustpilot](https://www.trustpilot.com/review/www.ptdistinction.com))
+**Falls short.** Steep learning curve and a dated look. The client app crashes and loses workout data, with no offline logging. Clients can't swap an exercise mid-workout. PayPal only (Stripe through Zapier). Email-only support. Most of its reviews date from 2021. ([Trustpilot](https://www.trustpilot.com/review/www.ptdistinction.com))
 
 ## Kahunas
 
@@ -101,7 +102,7 @@ All of them take client payments on the web, through the coach's own Stripe or P
 
 **Good.** Unlimited clients and an own-name app for US$99/mo, with 0% payment commission. Support and 1:1 onboarding are praised (Trustpilot 4.8 from 459 reviews).
 
-**Falls short.** Crashes mid-workout that lose data. Nutrition search and barcodes miss. The own-name app is slow to launch and must sell through Apple in-app purchase on iPhone. No importing of past client data. ([Trustpilot](https://www.trustpilot.com/review/kahunas.io))
+**Falls short.** Crashes mid-workout that lose data, and no offline logging. Nutrition search and barcodes miss. The own-name Android apps sit under Kahunas's Google Play account, the iPhone versions lag the main app, and they must sell through Apple in-app purchase. No importing of past client data. ([Trustpilot](https://www.trustpilot.com/review/kahunas.io))
 
 ## Foodzilla
 
