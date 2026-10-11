@@ -1,0 +1,26 @@
+name: Release guard
+
+# Main is production. It only takes release PRs from staging, or urgent fixes from hotfix/* branches.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  source:
+    # This name is a required status check on main in .github/rulesets/main.json.
+    name: Main takes staging or hotfix only
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the source branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REF" = "staging" ] || [[ "$HEAD_REF" == hotfix/* ]]; then
+            echo "$HEAD_REF can merge into main."
+          else
+            echo "::error::Main only takes PRs from staging or hotfix/* branches. Point this PR at staging."
+            exit 1
+          fi

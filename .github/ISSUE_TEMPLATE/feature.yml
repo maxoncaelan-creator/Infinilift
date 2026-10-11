@@ -1,0 +1,36 @@
+name: Feature
+description: Something coaches or clients need that Infinilift doesn't do yet.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: job
+    attributes:
+      label: Who it's for and what they're trying to do
+      placeholder: A coach wants to copy last month's program to 5 clients at once.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: What someone can do on staging once this is finished.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Training
+        - Nutrition
+        - Check-ins and progress
+        - Messaging
+        - Payments
+        - Branding
+        - Admin and settings
+        - Other
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Links, competitor examples, screenshots.
