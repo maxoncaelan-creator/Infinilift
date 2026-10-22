@@ -28,7 +28,7 @@ Staging and production apps have different bundle IDs, so both install on the sa
 ## Releasing to production
 
 1. Open a PR from `staging` into `main` titled "Release [DATE]", listing what's in it.
-2. "Main takes staging or hotfix only" and "Lint, types and tests" must pass.
+2. "Lint, types and tests" must pass.
 3. Merge with a merge commit, never squash. Squashing a long-running branch makes the next release carry the same commits again.
 4. Production deploys from `main`. If a release changes native code (new permissions, new native modules), it needs new store builds. Otherwise it goes out over the air.
 
