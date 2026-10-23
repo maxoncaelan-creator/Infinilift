@@ -1,44 +1,127 @@
 # Infinilift MVP PRD
 
-Status: draft, 22 October 2026. Built from `docs/research/`. Comes before `docs/plan.md`.
+Status: draft, 23 October 2026. Built from `docs/research/`. Comes before `docs/plan.md`.
 
 ## The problem
 
-Coaching apps lose logged workouts, fail without signal, take too many taps to log a set, and leave new people stuck at sign-up. The MVP fixes the eight pain points that block use: P1, P2, P3, P5, P10, P11, P13 and P14 in `pain-points.md`.
+Coaching apps lose logged workouts, fail without signal, take too many taps to log a set, leave new people stuck at sign-up, and charge coaches extra for basics. The fifteen pain points are in `pain-points.md`. Each one maps to a feature below. Phase 1 is the MVP. Phase 2 starts after the beta.
 
 ## Users
 
 - **Coach:** writes programs, sees client logs, messages clients.
 - **Client:** follows the program, logs sets, messages the coach.
 
-## MVP scope
+## Pain points to features
 
-| # | Feature | Done when | Pain point |
-|---|---|---|---|
-| 1 | Join | Sign up with Apple, Google or an email code, or enter an invite code. No passwords. | P2 |
-| 2 | Invite a client | Coach sends an invite by email or link. Client accepts and lands on their coach's thread. | P2 |
-| 3 | Build and assign a program | Coach adds weeks, days, exercises, sets, reps, rest and notes. Assigns it with a start date. Copies a week. | |
-| 4 | Log a workout | Today's workout on one screen. Each set is pre-filled from the plan. A tick saves to the phone at once and syncs later. Survives app switch, lock, crash and restart. | P1, P3, P5 |
-| 5 | Last time | Each exercise shows the last weight and reps logged for it, from any workout. | P11 |
-| 6 | Rest timer | Starts on tick, uses the coach's default, and goes off with the phone locked. | P13 |
-| 7 | Messages | One thread per client. Text only. Shows sending, sent and failed. Retries by itself. | P10 |
-| 8 | Report a problem | A button on every screen. Works offline. Attaches app version and device. | P14 |
+| Pain point | Feature | Phase |
+|---|---|---|
+| P1 Logged workouts get lost | 4 Log a workout | 1 |
+| P2 New people can't get in | 1 Join, 2 Invite a client | 1 |
+| P3 Slow, crashes, no signal | 4 Log a workout, 8 Report a problem | 1 |
+| P4 Updates break things | 9 Safe updates | 1 |
+| P5 Too many taps | 4 Log a workout | 1 |
+| P6 Health data wrong or missing | 12 Health sync | 2 |
+| P7 Food database wrong outside the US | 13 Food diary | 2 |
+| P8 Features missing on some screens | 10 Full parity | 1 |
+| P9 Video fails both ways | 14 Form-check video | 2 |
+| P10 Messages go missing | 7 Messages | 1 |
+| P11 Clients can't see last time | 5 Last time | 1 |
+| P12 Coaches pay extra for basics | 15 Flat plan and payments | 2 (free invites in phase 1) |
+| P13 Rest timers unreliable | 6 Rest timer | 1 |
+| P14 Support can't be reached | 8 Report a problem | 1 |
+| P15 Clients locked out of their data | 11 Client keeps history, 16 Data export | 1, 2 |
 
-Every feature works on web, iPhone and Android.
+## Features
 
-## Not in the MVP
+**Phase 1 (MVP)**
 
-Payments (coaches invite clients for free until phase 2), check-ins and progress photos, food diary, wearables, form-check video, automations, own-name apps, supersets and progression rules, client data export, importing old programs.
+1. **Join.** Sign up with Apple, Google or an email code, or enter an invite code. No passwords.
+2. **Invite a client.** Coach sends an invite by email or link. Client accepts and lands on their coach's thread.
+3. **Build and assign a program.** Coach adds weeks, days, exercises, sets, reps, rest and notes. Assigns it with a start date. Copies a week.
+4. **Log a workout.** Today's workout on one screen. Each set is pre-filled from the plan. A tick saves to the phone at once and syncs later. Survives app switch, lock, crash and restart.
+5. **Last time.** Each exercise shows the last weight and reps logged for it, from any workout.
+6. **Rest timer.** Starts on tick, uses the coach's default, and goes off with the phone locked.
+7. **Messages.** One thread per client. Text only. Shows sending, sent and failed. Retries by itself.
+8. **Report a problem.** A button on every screen. Works offline. Attaches app version and device.
+9. **Safe updates.** Most fixes ship over the air. Forced updates are for security fixes only. Releases roll out in stages and roll back when crashes or failed saves rise. No feature is removed without notice.
+10. **Full parity.** Every feature works on web, iPhone and Android.
+11. **Client keeps history.** When coaching ends, the coach loses access. The client keeps their logged workouts.
+
+**Phase 2**
+
+12. **Health sync.** Apple Health and Health Connect. Steps are one de-duplicated daily total. Clients can correct a value. Finished workouts write back.
+13. **Food diary.** Australian food data first, with barcodes. A missed barcode is saved for everyone. Coach can hide numbers from a client.
+14. **Form-check video.** Clips shrink on the phone and upload in the background. Coach replies with a video or a note pinned to a moment.
+15. **Flat plan and payments.** One plan with the basics included. No client-slot fees. Payments go to the coach's own Stripe account. Checkout shows the exact charge and renewal date.
+16. **Data export.** Clients download their history.
+17. **MCP server.** A remote server that lets a coach's AI assistant work with their own clients. Read tools first. Writes create drafts only. Details below.
+18. **AI plugin.** A Claude plugin that installs the MCP server and adds coach skills on top. Details below.
+
+Also later: check-ins, progress photos, automations, own-name apps, supersets and progression rules, importing old programs.
+
+## MCP server (feature 17)
+
+Lets a coach ask an AI assistant about their clients, for example "who missed two sessions this week", and draft programs from it. It's a new capability, not a pain point, so it has no row above.
+
+**Tools, read first:**
+
+- `list_clients`: name, current program, last logged workout.
+- `get_client_logs`: sets, weights and dates for one client and date range.
+- `get_program`: one client's or one program's weeks and days.
+- `get_last_time`: last weight and reps for one exercise, for one client.
+
+**Write tool, phase 2 after review:**
+
+- `draft_program`: creates a draft in the coach's app. The coach reviews and assigns it in the app. Nothing reaches a client without that step.
+
+**Rules:**
+
+- Calls run as the coach, with their Supabase token. Row Level Security applies, so the server can't read another coach's clients. No service key on the server.
+- Health values and message text go back only to the client's own coach. Neither is written to logs or analytics.
+- Every tool call is written to an audit table, with who, which tool and when. The table is a new file in `supabase/migrations/`.
+- Coaches only. Clients don't get MCP access in this phase.
+
+## AI plugin (feature 18)
+
+A Claude plugin that bundles the MCP server connection and a few coach skills. Coaches install it once and get tasks, not just tools:
+
+- **Weekly review:** lists clients who missed sessions or went quiet, with the reason from their logs.
+- **Draft a program:** turns a brief into a `draft_program` call. The coach reviews the draft in the app.
+- **Check-in summary:** one paragraph per client from the last four weeks of logs.
+
+**Rules:**
+
+- Skills only call MCP tools. The plugin keeps no data of its own and stores no credentials. Sign-in goes through the MCP server.
+- Skill text is written for the coach's business, in plain Australian English, not in Alio!'s voice.
+- Ships with the MCP server and is versioned with it. A tool change needs a matching skill change in the same PR.
 
 ## Tech stack
 
-- **App:** Expo (React Native) and TypeScript. One codebase for web, iOS and Android.
-- **On-device data:** SQLite. Every set is written locally first, then synced from a queue.
-- **Backend:** Supabase in Sydney. Postgres, Auth (Apple, Google, email code), Realtime for messages. Row Level Security: clients see their own data, coaches see their clients'.
-- **Push:** Expo Notifications.
-- **Build and release:** EAS Build and EAS Update, following `CONTRIBUTING.md`.
+| Need | Tool | Phase |
+|---|---|---|
+| App, web, iOS, Android | Expo (React Native) and TypeScript | 1 |
+| Web hosting | Vercel, static export of the Expo web build | 1 |
+| Database, auth, realtime | Supabase, Sydney. Postgres, Auth, Realtime, Row Level Security | 1 |
+| On-device store | SQLite. Every set is written locally, then synced from a queue | 1 |
+| Build and over-the-air updates | EAS Build and EAS Update | 1 |
+| Push notifications | Expo Push | 1 |
+| Email (invites, codes) | Resend, as Supabase's mail provider | 1 |
+| Crashes and failed saves | Sentry | 1 |
+| Analytics and staged rollouts | PostHog feature flags and funnels | 1 |
+| Public status page | Better Stack | 1 |
+| Tests | GitHub Actions for lint, types and unit tests. Maestro for airplane-mode and force-quit flows | 1 |
+| Staging access | Cloudflare Access, per `CONTRIBUTING.md` | 1 |
+| Video and progress photos | Cloudflare R2. No egress fees, and video downloads drive cost | 2 |
+| Payments | Stripe Connect, coaches' own accounts | 2 |
+| Health data | HealthKit and Health Connect, through native modules | 2 |
+| Food data | FSANZ food data and Open Food Facts | 2 |
+| MCP server | TypeScript MCP SDK, remote over Streamable HTTP, on Vercel functions | 2 |
+| MCP auth | The coach's Supabase token, passed through so Row Level Security applies | 2 |
+| AI plugin | Claude plugin manifest bundling the MCP server config and skill files | 2 |
 
-Schema changes are new files in `supabase/migrations/`.
+Schema changes are new files in `supabase/migrations/`. Keys live in EAS, Supabase and GitHub secrets, never in the repo.
+
+**Data rule:** analytics, crash reports and logs never carry health values, food entries, message text or photos. Check PostHog's hosting regions before setup; the app's own data stays in Sydney.
 
 ## Method
 
@@ -48,8 +131,9 @@ Build in slices. Each slice is one PR into `staging` and ships once it works the
 2. **Coach side.** Features 2 and 3.
 3. **Client logging.** Features 4 and 5. Test in airplane mode and after a force-quit before merging.
 4. **Rest timer and problem report.** Features 6 and 8.
-5. **Messages.** Feature 7.
+5. **Messages and safe updates.** Features 7 and 9.
 6. **Beta.** Three coaches, 30 clients, four weeks, on a production release.
+7. **Phase 2.** One slice per feature, 12 to 18, in the order the beta asks for them. The MCP read tools go first, then `draft_program`, then the plugin.
 
 **Done means:** works on web, iPhone and Android; the PR says which were checked; no logged set is lost in the airplane-mode and force-quit tests.
 
@@ -63,4 +147,6 @@ Build in slices. Each slice is one PR into `staging` and ships once it works the
 ## Decisions to confirm
 
 1. **Coach app:** web only, or web and phone? This PRD assumes both.
-2. **Payments:** free invites in the MVP, Stripe in phase 2.
+2. **Payments:** free invites in phase 1, Stripe in phase 2.
+3. **Tool choices:** the stack above is my proposal. Confirm PostHog, Sentry, Better Stack and Resend, or name replacements.
+4. **MCP server and plugin:** phase 2, coaches only, read tools first. Confirm, or move them into phase 1.
