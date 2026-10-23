@@ -1,0 +1,44 @@
+name: Bug
+description: Something in Infinilift doesn't work the way it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what you got.
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where
+      multiple: true
+      options: [Web, iOS, Android]
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options: [Staging, Production, Local]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Shown under Settings in the app.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to repeat it
+      placeholder: |
+        1. Sign in as a coach
+        2. Open a client's program
+        3.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs
+      description: Please leave out client names, health data, photos and passwords.
