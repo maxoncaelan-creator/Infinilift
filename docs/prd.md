@@ -55,6 +55,7 @@ Coaching apps lose logged workouts, fail without signal, take too many taps to l
 15. **Flat plan and payments.** One plan with the basics included. No client-slot fees. Payments go to the coach's own Stripe account. Checkout shows the exact charge and renewal date.
 16. **Data export.** Clients download their history.
 17. **MCP server.** A remote server that lets a coach's AI assistant work with their own clients. Read tools first. Writes create drafts only. Details below.
+18. **AI plugin.** A Claude plugin that installs the MCP server and adds coach skills on top. Details below.
 
 Also later: check-ins, progress photos, automations, own-name apps, supersets and progression rules, importing old programs.
 
@@ -80,6 +81,20 @@ Lets a coach ask an AI assistant about their clients, for example "who missed tw
 - Every tool call is written to an audit table, with who, which tool and when. The table is a new file in `supabase/migrations/`.
 - Coaches only. Clients don't get MCP access in this phase.
 
+## AI plugin (feature 18)
+
+A Claude plugin that bundles the MCP server connection and a few coach skills. Coaches install it once and get tasks, not just tools:
+
+- **Weekly review:** lists clients who missed sessions or went quiet, with the reason from their logs.
+- **Draft a program:** turns a brief into a `draft_program` call. The coach reviews the draft in the app.
+- **Check-in summary:** one paragraph per client from the last four weeks of logs.
+
+**Rules:**
+
+- Skills only call MCP tools. The plugin keeps no data of its own and stores no credentials. Sign-in goes through the MCP server.
+- Skill text is written for the coach's business, in plain Australian English, not in Alio!'s voice.
+- Ships with the MCP server and is versioned with it. A tool change needs a matching skill change in the same PR.
+
 ## Tech stack
 
 | Need | Tool | Phase |
@@ -102,6 +117,7 @@ Lets a coach ask an AI assistant about their clients, for example "who missed tw
 | Food data | FSANZ food data and Open Food Facts | 2 |
 | MCP server | TypeScript MCP SDK, remote over Streamable HTTP, on Vercel functions | 2 |
 | MCP auth | The coach's Supabase token, passed through so Row Level Security applies | 2 |
+| AI plugin | Claude plugin manifest bundling the MCP server config and skill files | 2 |
 
 Schema changes are new files in `supabase/migrations/`. Keys live in EAS, Supabase and GitHub secrets, never in the repo.
 
@@ -117,7 +133,7 @@ Build in slices. Each slice is one PR into `staging` and ships once it works the
 4. **Rest timer and problem report.** Features 6 and 8.
 5. **Messages and safe updates.** Features 7 and 9.
 6. **Beta.** Three coaches, 30 clients, four weeks, on a production release.
-7. **Phase 2.** One slice per feature, 12 to 17, in the order the beta asks for them. The MCP read tools go first, then `draft_program`.
+7. **Phase 2.** One slice per feature, 12 to 18, in the order the beta asks for them. The MCP read tools go first, then `draft_program`, then the plugin.
 
 **Done means:** works on web, iPhone and Android; the PR says which were checked; no logged set is lost in the airplane-mode and force-quit tests.
 
@@ -133,4 +149,4 @@ Build in slices. Each slice is one PR into `staging` and ships once it works the
 1. **Coach app:** web only, or web and phone? This PRD assumes both.
 2. **Payments:** free invites in phase 1, Stripe in phase 2.
 3. **Tool choices:** the stack above is my proposal. Confirm PostHog, Sentry, Better Stack and Resend, or name replacements.
-4. **MCP server:** phase 2, coaches only, read tools first. Confirm, or move it into phase 1.
+4. **MCP server and plugin:** phase 2, coaches only, read tools first. Confirm, or move them into phase 1.
