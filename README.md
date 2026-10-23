@@ -1,4 +1,4 @@
-# Infinilift
+# Lift and Fuel
 
 Infinilift is a coaching app for personal trainers, online coaches and small gyms. Coaches write programs, set nutrition targets, run check-ins, message clients and take payments. Clients train, log food and check in. It runs on the web, iPhone and Android from one codebase.
 
